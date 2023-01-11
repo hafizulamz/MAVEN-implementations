@@ -1,8 +1,8 @@
 python3 run_maven.py \
-    --data_dir ../maven/ \ #path to the raw MAVEN data files
+    --data_dir ../../maven/ \
     --model_type bertcrf \
     --model_name_or_path bert-base-uncased \
-    --output_dir ./MAVEN \ #path to dump checkpoints
+    --output_dir ./MAVEN \
     --max_seq_length 128 \
     --do_lower_case \
     --per_gpu_train_batch_size 16 \
@@ -16,3 +16,6 @@ python3 run_maven.py \
     --do_train \
     --do_eval \
     --evaluate_during_training
+
+#data_dir = path to the raw MAVEN data files
+#output_dir = path to dump checkpoints
