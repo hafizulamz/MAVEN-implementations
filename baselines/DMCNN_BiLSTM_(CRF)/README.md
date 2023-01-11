@@ -21,6 +21,7 @@ To run this code, you need to:
 4. install the requirements (packages) using ```pip install -r requirements.txt```
 5. put raw files of MAVEN dataset in `./raw`
 6. run ```python main.py --config [path of config files] --gpu [gpu, optional]```  
+        (e.g.: ```python main.py --config config/dmcnn.config```)
 we will train, evaluate and test models in every epoch. We output the performance of training and evaluating, and generate test result files for submit to [CodaLab](https://competitions.codalab.org/competitions/27320#learn_the_details-submission-format).
 
 All the hyper-parameters for the three models are in config files at `./config/`, you can modify them as you wish.
