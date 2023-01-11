@@ -1,0 +1,6 @@
+torch==1.6 -f https://download.pytorch.org/whl/torch_stable.html
+cupy-cuda102 #originally: (CUDA==10.2), but replaced to cupy as AMD processor is not supported by CUDA
+numpy
+scikit-learn #originally: sklearn
+seqeval==1.2.2
+tqdm==4.44.0
