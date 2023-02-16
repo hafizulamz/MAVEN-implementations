@@ -14,7 +14,7 @@ This code is the implementation for BERT+CRF model. The implementations are base
 Hint: please read and delete all the comments after ```\``` in each line of the ```.sh``` scripts before running them.
 
 ### To run this code, you need to:
-1. Check if your PC has python3.7 installed. If no, run ```sh setupenv.sh```. If step 1 is complete, skip the following:
+1. Check if your PC has python3.7 installed. If no, run ```sh setupenv-py37.sh```. If step 1 is complete, skip the following:
     a. make sure you have installed Python 3.7 from ppa:deadsnake using ```sudo add-apt-repository ppa:deadsnakes/ppa```, then ```sudo apt-get update```, then ```sudo apt install python3.7```.
     b. install python3.7 dev and venv packages using ```sudo apt install python3.7-dev``` and ```sudo apt install python3.7-venv```
     c. install pip for this Python version using ```curl https://bootstrap.pypa.io/get-pip.py | sudo python3.7```
