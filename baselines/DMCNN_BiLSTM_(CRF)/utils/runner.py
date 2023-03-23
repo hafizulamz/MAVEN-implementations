@@ -2,21 +2,22 @@ import os
 import sys
 import json
 import copy
+import time
 import torch
 from utils.global_variables import Global
 from utils.evaluation import Evaluation
 
-def run(parameters, config, device):
+def run(parameters, config, device, exec_start_time):
     trained_epoch = -1
     max_epoch = config.getint("train", "epoch")
     valid_interval = config.getint("train", "valid_interval")
     saver = {}
     for epoch in range(trained_epoch + 1, max_epoch):
-        run_one_epoch(parameters, config, device, epoch, "train")
+        run_one_epoch(parameters, config, device, epoch, exec_start_time, "train")
         if epoch % valid_interval == 0:
             with torch.no_grad():
-                valid_metric = run_one_epoch(parameters, config, device, epoch, "valid")
-                test_metric = run_one_epoch(parameters, config, device, epoch, "test")
+                valid_metric = run_one_epoch(parameters, config, device, epoch, exec_start_time, "valid")
+                test_metric = run_one_epoch(parameters, config, device, epoch, exec_start_time, "test")
                 print()
                 if saver == {} or valid_metric["micro_f1"] > saver["valid"]["micro_f1"]:
                     saver["epoch"] = epoch
@@ -31,7 +32,7 @@ def run(parameters, config, device):
     print("Best Epoch {}\nValid Metric: {}".format(saver["epoch"], saver["valid"]))
 
 
-def run_one_epoch(parameters, config, device, epoch, mode):
+def run_one_epoch(parameters, config, device, epoch, exec_start_time, mode):
     model = parameters["model"]
 
     if mode == "train":
@@ -76,8 +77,7 @@ def run_one_epoch(parameters, config, device, epoch, mode):
                         if p != "O":
                             p = p[2:]
                         assert p in Global.type2id.keys()
-                        pred[doc].append({"id": c,
-                                          "type_id": Global.type2id[p]})
+                        pred[doc].append({"id": c, "type_id": Global.type2id[p]})
         else:
             results = model(data=data, mode=mode)
             if mode != "test":
@@ -91,12 +91,12 @@ def run_one_epoch(parameters, config, device, epoch, mode):
                 for did, cid, pre in zip(docids, canids, prediction):
                     if did not in pred.keys():
                         pred[did] = []
-                    pred[did].append({"id": cid,
-                                      "type_id": pre})
+                    pred[did].append({"id": cid, "type_id": pre})
+        exec_elapsed_time = time.time() - exec_start_time
         if mode != "test":
-            print("\r{}: Epoch {} Step {:0>4d}/{} | Loss = {:.4f}".format(mode, epoch, step + 1, len(dataset), round(total_loss / (step + 1), 4)), end="")
+            print("\r{}: Epoch {} Step {:0>4d}/{} | Loss = {:.4f} | Runtime: {}".format(mode, epoch, step + 1, len(dataset), round(total_loss / (step + 1), 4), time.strftime("%H:%M:%S", time.gmtime(exec_elapsed_time))), end="")
         else:
-            print("\r{}: Epoch {} Step {:0>4d}/{}".format(mode, epoch, step + 1, len(dataset)), end="")
+            print("\r{}: Epoch {} Step {:0>4d}/{} | Runtime: {}".format(mode, epoch, step + 1, len(dataset)), time.strftime("%H:%M:%S", time.gmtime(exec_elapsed_time)), end="")
 
         if mode == "train":
             loss.backward()

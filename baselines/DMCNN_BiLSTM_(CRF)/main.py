@@ -28,7 +28,7 @@ if __name__ == "__main__":
     cpu_start_time = time.process_time()
     
     # run the program 
-    run(parameters, config, device)
+    run(parameters, config, device, exec_start_time)
     
     # get the end time
     exec_elapsed_time = time.time() - exec_start_time

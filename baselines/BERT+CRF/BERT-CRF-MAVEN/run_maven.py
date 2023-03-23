@@ -107,10 +107,11 @@ def train(args, train_dataset, model, tokenizer, labels, pad_token_label_id):
          "weight_decay": args.weight_decay},
         {"params": [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], "weight_decay": 0.0}
     ]
-    # for crf might wanna change this to SGD with gradient clipping and my other scheduler **** eskiler adamken bile 1000lerden başlayıp 10lara düşüyo
+    # for crf might wanna change this to SGD with gradient clipping and my other scheduler 
+    # **** eskiler adamken bile 1000lerden başlayıp 10lara düşüyo
+    # translation: Even when old, it starts from thousands and drops to tens.
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps,
-                                                num_training_steps=t_total)
+    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps, num_training_steps=t_total)
     if args.fp16:
         try:
             from apex import amp
@@ -124,9 +125,7 @@ def train(args, train_dataset, model, tokenizer, labels, pad_token_label_id):
 
     # Distributed training (should be after apex fp16 initialization)
     if args.local_rank != -1:
-        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank],
-                                                          output_device=args.local_rank,
-                                                          find_unused_parameters=True)
+        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank], output_device=args.local_rank, find_unused_parameters=True)
 
     # Train!
     logger.info("***** Running training *****")
@@ -153,8 +152,7 @@ def train(args, train_dataset, model, tokenizer, labels, pad_token_label_id):
                       "attention_mask": batch[1],
                       "labels": batch[3]}
             if args.model_type != "distilbert":
-                inputs["token_type_ids"] = batch[2] if args.model_type in ["bert",
-                                                                           "xlnet"] else None  # XLM and RoBERTa don"t use segment_ids
+                inputs["token_type_ids"] = batch[2] if args.model_type in ["bert", "xlnet"] else None  # XLM and RoBERTa don"t use segment_ids
 
             outputs = model(pad_token_label_id=pad_token_label_id, **inputs)
             loss = outputs[0]  # model outputs are always tuple in pytorch-transformers (see doc)

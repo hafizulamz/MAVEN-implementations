@@ -1,3 +1,5 @@
-BERT-CRF-MAVEN -ok
+BERT-CRF-MAVEN -tested 50%, not tested run_MAVEN_infer.sh
 
-DMCNN -ok
+DMCNN -ok (tested)
+BiLSTM -ok (not tested)
+BiLSTM+CRF -ok (but very slow) --see timesheet on paper
