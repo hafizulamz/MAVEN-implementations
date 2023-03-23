@@ -18,9 +18,10 @@ To run this code, you need to:
     c. install pip for this Python version using ```curl https://bootstrap.pypa.io/get-pip.py | sudo python3.7```
 2. cd to the ("DMCNN_BiLSTM_(CRF)") folder and create a python virtual environment (venv) using ```python3.7 -m venv env```
 3. activate the venv using ```source env/bin/activate```. To deactivate after use, type ```deactivate```.
-4. install the requirements (packages) using ```pip install -r requirements.txt```
-5. put raw files of MAVEN dataset in `./raw`
-6. run ```python3.7 main.py --config [path of config files] --gpu [gpu, optional]```  
+4. check if you need CUDA (for AMD processor) or CUPY (Intel ONLY) for your machine. Choose the CUDA/CUPY from ```requirements.txt```.
+5. install the requirements (packages) using ```pip install -r requirements.txt```
+6. put raw files of MAVEN dataset in `./raw`
+7. run ```python3.7 main.py --config [path of config files] --gpu [gpu, optional]```  
         (e.g.: ```python3.7 main.py --config config/dmcnn.config --gpu 0```)
 we will train, evaluate and test models in every epoch. We output the performance of training and evaluating, and generate test result files for submit to [CodaLab](https://competitions.codalab.org/competitions/27320#learn_the_details-submission-format).
 
